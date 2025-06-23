@@ -10,7 +10,7 @@
     "dim": 300,
 
 	"neg_sampling": "uniform",
-	"neg_triple_num": 125,
+	"neg_triple_num": 1,
 
 	"learning_rate": 0.002,
 	"max_epoch": 2000,
@@ -19,18 +19,19 @@
 	"batch_threads_num": 2,
 	"test_threads_num": 3,
 
-	"ordered": true,
+	"ordered": false,
 	"start_valid": 30,
-	"eval_freq": 10,
+	"eval_freq": 25,
 	"stop_metric": "hits1",
 	"eval_metric": "manhattan",
 	"csls": 10,
-	"top_k": [1, 5, 10, 50],
+	"top_k": [1, 5, 10, 50, 100],
 	"is_save": true,
 	"eval_norm": false,
 
     "gamma": 1.0,
     "dropout": 0,
 	"beta": 0.3,
-    "alpha": 0.1
+    "alpha": 0.1,
+	"error_rate": 0
 }

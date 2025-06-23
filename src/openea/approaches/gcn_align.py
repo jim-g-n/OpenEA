@@ -813,8 +813,12 @@ class GCN_Align(BasicModel):
             embeddings = np.concatenate([se*beta, ae*(1.0-beta)], axis=1)
         else:
             embeddings = se
-        embeds1 = np.array([embeddings[e] for e in self.kgs.valid_entities1])
-        embeds2 = np.array([embeddings[e] for e in self.kgs.valid_entities2 + self.kgs.test_entities2])
+        if len(self.kgs.valid_links) > 0:
+            embeds1 = np.array([embeddings[e] for e in self.kgs.valid_entities1])
+            embeds2 = np.array([embeddings[e] for e in self.kgs.valid_entities2 + self.kgs.test_entities2])
+        else:
+            embeds1 = np.array([embeddings[e] for e in self.kgs.test_entities1])
+            embeds2 = np.array([embeddings[e] for e in self.kgs.test_entities2])
         hits1_12, mrr_12 = valid(embeds1, embeds2, None, self.args.top_k, self.args.test_threads_num,
                                  metric=self.args.eval_metric)
         if stop_metric == 'hits1':

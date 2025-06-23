@@ -142,8 +142,14 @@ def valid_temp(model, embed_choice='avg', w=(1, 1, 1)):
     else:  # 'final'
         ent_embeds = model.ent_embeds
     print(embed_choice, 'valid results:')
-    embeds1 = ent_embeds[model.kgs.valid_entities1,]
-    embeds2 = ent_embeds[model.kgs.valid_entities2 + model.kgs.test_entities2,]
+    if len(model.kgs.valid_links) > 0:
+        embeds1 = ent_embeds[model.kgs.valid_entities1,]
+        embeds2 = ent_embeds[model.kgs.valid_entities2 + model.kgs.test_entities2,]
+    else:
+        embeds1 = ent_embeds[model.kgs.test_entities1,]
+        embeds2 = ent_embeds[model.kgs.test_entities2,]
+    #embeds1 = ent_embeds[model.kgs.valid_entities1,]
+    #embeds2 = ent_embeds[model.kgs.valid_entities2 + model.kgs.test_entities2,]
     hits1_12, mrr_12 = eva.valid(embeds1, embeds2, None, model.args.top_k, model.args.test_threads_num,
                                  normalize=True)
     del embeds1, embeds2

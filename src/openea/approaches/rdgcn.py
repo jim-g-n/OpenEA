@@ -519,8 +519,12 @@ class RDGCN(BasicModel):
 
     def valid_(self, stop_metric):
         embedding = self.sess.run(self.output)
-        embeds1 = np.array([embedding[e] for e in self.kgs.valid_entities1])
-        embeds2 = np.array([embedding[e] for e in self.kgs.valid_entities2 + self.kgs.test_entities2])
+        if len(self.kgs.valid_links) > 0:
+            embeds1 = np.array([embedding[e] for e in self.kgs.valid_entities1])
+            embeds2 = np.array([embedding[e] for e in self.kgs.valid_entities2 + self.kgs.test_entities2])
+        else:
+            embeds1 = np.array([embedding[e] for e in self.kgs.test_entities1])
+            embeds2 = np.array([embedding[e] for e in self.kgs.test_entities2])
         hits1_12, mrr_12 = valid(embeds1, embeds2, None, self.args.top_k, self.args.test_threads_num,
                                  metric=self.args.eval_metric)
         if stop_metric == 'hits1':

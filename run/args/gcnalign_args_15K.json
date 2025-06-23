@@ -21,11 +21,11 @@
 
 	"ordered": true,
 	"start_valid": 100,
-	"eval_freq": 10,
+	"eval_freq": 25,
 	"stop_metric": "hits1",
 	"eval_metric": "manhattan",
 	"csls": 10,
-	"top_k": [1, 5, 10, 50],
+	"top_k": [1, 5, 10, 50, 100],
 	"is_save": true,
 	"eval_norm": false,
 
@@ -38,5 +38,6 @@
     "dropout": 0,
 
 	"test_method": "sa",
-	"beta": 0.9
+	"beta": 0.9,
+	"error_rate": 0
 }

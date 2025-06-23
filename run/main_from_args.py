@@ -3,7 +3,7 @@ import sys
 import time
 
 from openea.modules.args.args_hander import check_args, load_args
-from openea.modules.load.kgs import read_kgs_from_folder
+from openea.modules.load.kgs import read_kgs_from_folder, read_kgs_from_folder_no_valid
 from openea.models.trans import TransD
 from openea.models.trans import TransE
 from openea.models.trans import TransH
@@ -81,13 +81,18 @@ if __name__ == '__main__':
     args = load_args(sys.argv[1])
     args.training_data = args.training_data + sys.argv[2] + '/'
     args.dataset_division = sys.argv[3]
+    args.align_error_rate = sys.argv[4]
+    args.source_kg_error = sys.argv[5]
+    args.target_kg_error = sys.argv[6]
     print(args.embedding_module)
     print(args)
     remove_unlinked = False
     if args.embedding_module == "RSN4EA":
         remove_unlinked = True
-    kgs = read_kgs_from_folder(args.training_data, args.dataset_division, args.alignment_module, args.ordered,
-                               remove_unlinked=remove_unlinked)
+    #kgs = read_kgs_from_folder(args.training_data, args.dataset_division, args.alignment_module, args.ordered, args.align_error_rate,
+    #                           remove_unlinked=remove_unlinked)
+    kgs = read_kgs_from_folder_no_valid(args.training_data, args.dataset_division, args.alignment_module, args.ordered, args.align_error_rate,
+                               args.source_kg_error, args.target_kg_error, remove_unlinked=remove_unlinked)
     model = get_model(args.embedding_module)()
     model.set_args(args)
     model.set_kgs(kgs)

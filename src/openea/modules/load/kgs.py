@@ -5,6 +5,7 @@ from openea.modules.load.read import *
 class KGs:
     def __init__(self, kg1: KG, kg2: KG, train_links, test_links, valid_links=None, mode='mapping', ordered=True):
         if mode == "sharing":
+            ordered = False
             ent_ids1, ent_ids2 = generate_sharing_id(train_links, kg1.relation_triples_set, kg1.entities_set,
                                                      kg2.relation_triples_set, kg2.entities_set, ordered=ordered)
             rel_ids1, rel_ids2 = generate_sharing_id([], kg1.relation_triples_set, kg1.relations_set,
@@ -76,15 +77,15 @@ class KGs:
         self.attributes_num = len(self.kg1.attributes_set | self.kg2.attributes_set)
 
 
-def read_kgs_from_folder(training_data_folder, division, mode, ordered, remove_unlinked=False):
+def read_kgs_from_folder(training_data_folder, division, mode, ordered, error_rate, remove_unlinked=False):
     if 'dbp15k' in training_data_folder.lower() or 'dwy100k' in training_data_folder.lower():
-        return read_kgs_from_dbp_dwy(training_data_folder, division, mode, ordered, remove_unlinked=remove_unlinked)
+        return read_kgs_from_dbp_dwy(training_data_folder, division, mode, ordered, error_rate, remove_unlinked=remove_unlinked)
     kg1_relation_triples, _, _ = read_relation_triples(training_data_folder + 'rel_triples_1')
     kg2_relation_triples, _, _ = read_relation_triples(training_data_folder + 'rel_triples_2')
     kg1_attribute_triples, _, _ = read_attribute_triples(training_data_folder + 'attr_triples_1')
     kg2_attribute_triples, _, _ = read_attribute_triples(training_data_folder + 'attr_triples_2')
 
-    train_links = read_links(training_data_folder + division + 'train_links')
+    train_links = read_links(training_data_folder + division + 'train_links_' + str(error_rate))
     valid_links = read_links(training_data_folder + division + 'valid_links')
     test_links = read_links(training_data_folder + division + 'test_links')
 
@@ -96,6 +97,27 @@ def read_kgs_from_folder(training_data_folder, division, mode, ordered, remove_u
     kg1 = KG(kg1_relation_triples, kg1_attribute_triples)
     kg2 = KG(kg2_relation_triples, kg2_attribute_triples)
     kgs = KGs(kg1, kg2, train_links, test_links, valid_links=valid_links, mode=mode, ordered=ordered)
+    return kgs
+
+def read_kgs_from_folder_no_valid(training_data_folder, division, mode, ordered, align_error_rate, source_kg_error, target_kg_error, remove_unlinked=False):
+    #if 'dbp15k' in training_data_folder.lower() or 'dwy100k' in training_data_folder.lower():
+    #    return read_kgs_from_dbp_dwy(training_data_folder, division, mode, ordered, error_rate, remove_unlinked=remove_unlinked)
+    kg1_relation_triples, _, _ = read_relation_triples(training_data_folder + 'rel_triples_1_' + str(source_kg_error))
+    kg2_relation_triples, _, _ = read_relation_triples(training_data_folder + 'rel_triples_2_' + str(target_kg_error))
+    kg1_attribute_triples, _, _ = read_attribute_triples(training_data_folder + 'attr_triples_1')
+    kg2_attribute_triples, _, _ = read_attribute_triples(training_data_folder + 'attr_triples_2')
+
+    train_links = read_links(training_data_folder + division + 'train_links_' + str(align_error_rate))
+    test_links = read_links(training_data_folder + division + 'test_links')
+
+    if remove_unlinked:
+        links = train_links + test_links
+        kg1_relation_triples = remove_unlinked_triples(kg1_relation_triples, links)
+        kg2_relation_triples = remove_unlinked_triples(kg2_relation_triples, links)
+
+    kg1 = KG(kg1_relation_triples, kg1_attribute_triples)
+    kg2 = KG(kg2_relation_triples, kg2_attribute_triples)
+    kgs = KGs(kg1, kg2, train_links, test_links, mode=mode, ordered=ordered)
     return kgs
 
 
@@ -131,14 +153,14 @@ def read_kgs_from_files(kg1_relation_triples, kg2_relation_triples, kg1_attribut
     return kgs
 
 
-def read_kgs_from_dbp_dwy(folder, division, mode, ordered, remove_unlinked=False):
+def read_kgs_from_dbp_dwy(folder, division, mode, ordered, error_rate, remove_unlinked=False):
     folder = folder + division
     kg1_relation_triples, _, _ = read_relation_triples(folder + 'triples_1')
     kg2_relation_triples, _, _ = read_relation_triples(folder + 'triples_2')
     if os.path.exists(folder + 'sup_pairs'):
         train_links = read_links(folder + 'sup_pairs')
     else:
-        train_links = read_links(folder + 'sup_ent_ids')
+        train_links = read_links(folder + 'sup_ent_ids_' + str(error_rate))
     if os.path.exists(folder + 'ref_pairs'):
         test_links = read_links(folder + 'ref_pairs')
     else:

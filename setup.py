@@ -13,11 +13,13 @@ INSTALL_REQUIRES = [
     # 'tensorflow',
     'pandas==0.24.2',
     'matching==0.1.1',
-    'scikit-learn',
-    'numpy',
-    'gensim',
+    # added my own version nums
+    'scikit-learn==0.20.0',
+    'numpy==1.16.0',
+    'gensim==3.7.3',
     'python-Levenshtein',
-    'scipy',
+    'scipy==1.2.1',
+    'psutil==5.8.0'
 ]
 
 if __name__ == '__main__':
