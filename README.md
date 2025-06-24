@@ -37,13 +37,13 @@ pip install -e .
 ```
 
 #### Usage
-The following is an example about how to use OpenEA in Python (We assume that you have already downloaded our datasets and configured the hyperparameters as in the [examples](https://github.com/nju-websoft/OpenEA/tree/master/run/args).)
+The main adjustment is in the number of inputs when reading KGs from a folder. Filename extensions are now required for the seed alignments file and source and target triples files. We create noisy versions of these data labelled with the percentage noise.
 ```python
 import openea as oa
 
 model = oa.kge_model.TransE
 args = load_args("hyperparameter file folder")
-kgs = read_kgs_from_folder("data folder")
+kgs = read_kgs_from_folder("data folder", "source file number", "target file number", "seed file number")
 model.set_args(args)
 model.set_kgs(kgs)
 model.init()
@@ -52,16 +52,8 @@ model.test()
 model.save()
 
 ```
-More examples are available [here](https://github.com/nju-websoft/OpenEA/tree/master/run)
-
-To run the off-the-shelf approaches on our datasets and reproduce our experiments, change into the ./run/ directory and use the following script:
+We run our experiments using using the main_from_args.py and main_from_args_wo_attr.py files. For example:
 
 ```bash
-python main_from_args.py "predefined_arguments" "dataset_name" "split"
-```
-
-For example, if you want to run BootEA on D-W-15K (V1) using the first split, please execute the following script:
-
-```bash
-python main_from_args.py ./args/bootea_args_15K.json D_W_15K_V1 721_5fold/1/
+python main_from_args.py ./args/bootea_args_15K.json IDS15K 0_3/ 10 10 10
 ```
