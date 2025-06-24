@@ -20,7 +20,8 @@ INSTALL_REQUIRES = [
     'python-Levenshtein',
     'scipy==1.2.1',
     'psutil==5.8.0',
-    'smart_open==1.10.0'
+    'smart_open==1.10.0',
+    'python-igraph==0.9.6'
 ]
 
 if __name__ == '__main__':
