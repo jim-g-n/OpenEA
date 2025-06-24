@@ -1,10 +1,10 @@
 # OpenEA Noisy Implementation
 
-This is an extended version of the OpenEA library that allows for additional arguments in loading the KGs and seed alignments. This is used to allow for noise in the data. 
+This is an extended version of the OpenEA library that allows for additional filename extension arguments in loading the KGs and seed alignments. This is used to allow for noise in the data. 
 
 ## Overview
 
-
+The general use of the package is similar to the original OpenEA. To ensure reproducibility, we explicitly include the version numbers of the GPU implementation used in our experiments. 
 
 #### Dependencies
 * Python 3.6.15
@@ -20,13 +20,12 @@ This is an extended version of the OpenEA library that allows for additional arg
 * smart_open 1.10.0
 * python-igraph 0.9.6
 
-#### Installation
-We recommend creating a new conda environment to install and run OpenEA. You should first install tensorflow-gpu (tested on 1.8 and 1.12), graph-tool (tested on 2.27 and 2.29,  the latest version would cause a bug), and python-igraph using conda:
+#### GPU Installation
+The package can be installed using a similar procedure as the original OpenEA.
 ```bash
 conda create --name openea python=3.6.15 graph-tool==2.40 -c conda-forge
 conda activate openea
 conda install tensorflow-gpu==1.12
-conda install -c conda-forge python-igraph
 ```
 
 Then, OpenEA can be installed using pip with the following steps:
