@@ -19,7 +19,8 @@ INSTALL_REQUIRES = [
     'gensim==3.7.3',
     'python-Levenshtein',
     'scipy==1.2.1',
-    'psutil==5.8.0'
+    'psutil==5.8.0',
+    'smart_open==1.10.0'
 ]
 
 if __name__ == '__main__':
