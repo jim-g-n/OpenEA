@@ -1,6 +1,6 @@
 # OpenEA Noisy Implementation
 
-This is an extended version of the OpenEA library that allows for additional filename extension arguments in loading the KGs and seed alignments. This is used to allow for noise in the data. 
+This is an extended version of the OpenEA library that requires additional filename extension arguments in loading the KGs and seed alignments. This is used to allow for noise in the data. 
 
 ## Overview
 
@@ -35,20 +35,22 @@ git clone https://github.com/jim-g-n/OpenEA.git OpenEA
 cd OpenEA
 pip install -e .
 ```
-The setup.py file defines explicit versions of dependencies for a GPU implementation. These can be manually updated for a CPU implementation based on the version numbers in the cpu_requirements.txt file. Users should also change their TensorFlow to version 1.13.1 if wanting to use a CPU.
+The `setup.py` file defines explicit versions of dependencies for a GPU implementation. These can be manually updated for a CPU implementation based on the version numbers in the `cpu_requirements.txt` file. Users should also change their TensorFlow to version 1.13.1 if wanting to use a CPU.
 
 #### Usage
-The main adjustment is in the number of inputs when reading KGs from a folder. Filename extensions are now required for the seed alignments file and source and target triples files, and are usually defined in terms of the percentage error. Additionally, validation sets are no longer taken as input. More concretely, KGs can be read using the following function:
+The main adjustment is in the number of inputs when reading KGs from a folder. Filename extensions are now required for the seed alignments file and source and target triples files, with the idea to define these in terms of the percentage error. Additionally, validation sets are no longer taken as input. More concretely, KGs can be read using the following function:
 
+```python
 read_kgs_from_folder_no_valid(training_data_folder, division, mode, ordered, align_error_rate, source_kg_error, target_kg_error, remove_unlinked=False)
+```
 
 where
- * training_data_folder, division, mode, ordered all function as before
- * Train links are read from the file 'train_links_' + align_error_rate
- * Source triples are read from the file 'rel_triples_1_' + source_kg_error
- * Target triples are read from the file 'rel_triples_2_' + target_kg_error
+ * _training_data_folder_, _division_, _mode_, _ordered_ all function as before
+ * Train links are read from the file `'train_links_' + str(align_error_rate)`
+ * Source triples are read from the file `'rel_triples_1_' + str(source_kg_error)`
+ * Target triples are read from the file `'rel_triples_2_' + str(target_kg_error)`
 
-The files main_from_args.py and main_from_args_wo_attr.py have also been updated to allow for these changes. For example, an experiment on IDS15K with a training size of 30% and 10% error in each of the seed alignments, source triples, and target triples can be run using:
+The files `main_from_args.py` and `main_from_args_wo_attr.py` have also been updated to allow for these changes. For example, an experiment on IDS15K with a training size of 30% and 10% error in each of the seed alignments, source triples, and target triples can be run using:
 
 ```bash
 python main_from_args.py ./args/bootea_args_15K.json IDS15K 0_3/ 10 10 10
