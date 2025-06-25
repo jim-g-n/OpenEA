@@ -12,7 +12,7 @@ The general use of the package is similar to the original OpenEA. To ensure oper
 * Scipy==1.2.1 
 * Numpy==1.16.0
 * Graph-tool==2.40
-* Pandas==0.24.0
+* Pandas==0.24.2
 * Scikit-learn==0.20.0
 * Matching==0.1.1
 * Gensim==3.7.3
@@ -35,7 +35,7 @@ git clone https://github.com/jim-g-n/OpenEA.git OpenEA
 cd OpenEA
 pip install -e .
 ```
-The `setup.py` file defines explicit versions of dependencies for a GPU implementation. These can be manually updated for a CPU implementation based on the version numbers in the `cpu_requirements.txt` file. Users should also change their TensorFlow to version 1.13.1 if wanting to use a CPU.
+The `setup.py` file defines explicit versions of dependencies for a GPU implementation. These can be manually updated for a CPU implementation based on the version numbers in the `cpu_requirements.txt` file. Users should also change their Python to version 3.7.12 and TensorFlow to version 1.13.1 if wanting to use a CPU.
 
 #### Usage
 The main adjustment is in the number of inputs when reading KGs from a folder. Filename extensions are now required for the seed alignments file and source and target triples files, with the idea to define these in terms of the percentage error. Additionally, validation sets are no longer taken as input. More concretely, KGs can be read using the following function:
