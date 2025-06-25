@@ -50,8 +50,21 @@ where
  * Source triples are read from the file `'rel_triples_1_' + str(source_kg_error)`
  * Target triples are read from the file `'rel_triples_2_' + str(target_kg_error)`
 
-The files `main_from_args.py` and `main_from_args_wo_attr.py` have also been updated to allow for these changes. For example, an experiment on IDS15K with a training size of 30% and 10% error in each of the seed alignments, source triples, and target triples can be run using:
+The files `main_from_args.py` and `main_from_args_wo_attr.py` have also been updated to allow for these changes. For example, an experiment on IDS15K with a training size of 30% and 10% error the seed alignments, 20% error in source triples, and 30% error in target triples can be run using:
 
 ```bash
-python main_from_args.py ./args/bootea_args_15K.json IDS15K 0_3/ 10 10 10
+python main_from_args.py ./args/bootea_args_15K.json IDS15K 0_3/ 10 20 30
+```
+
+where the associated alignment, source triples, and target triples files are `train_links_10`, `rel_triples_1_20`, and `rel_triples_2_30`, respectively. Data should be in a similar format as in the original OpenEA, i.e.
+```
+IDS15K/
+├── attr_triples_1: attribute triples in KG1
+├── attr_triples_2: attribute triples in KG2
+├── rel_triples_1_20: noisy relation triples in KG1
+├── rel_triples_2_30: noisy relation triples in KG2
+├── ent_links: entity alignment between KG1 and KG2
+├── 0_3/: entity alignment with 30% training size and 10% noise on training
+│   ├── test_links
+│   ├── train_links_10
 ```
