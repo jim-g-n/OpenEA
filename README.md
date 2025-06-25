@@ -4,21 +4,21 @@ This is an extended version of the OpenEA library that allows for additional fil
 
 ## Overview
 
-The general use of the package is similar to the original OpenEA. To ensure reproducibility, we explicitly include the version numbers of the GPU implementation used in our experiments. 
+The general use of the package is similar to the original OpenEA. To ensure operability, we explicitly include the version numbers for a working GPU implementation. 
 
 #### Dependencies
-* Python 3.6.15
-* Tensorflow 1.12
-* Scipy 1.2.1 
-* Numpy 1.16.0
-* Graph-tool 2.40
-* Pandas 0.24.0
-* Scikit-learn 0.20.0
-* Matching 0.1.1
-* Gensim 3.7.3
-* psutil 5.8.0
-* smart_open 1.10.0
-* python-igraph 0.9.6
+* Python==3.6.15
+* Tensorflow==1.12
+* Scipy==1.2.1 
+* Numpy==1.16.0
+* Graph-tool==2.40
+* Pandas==0.24.0
+* Scikit-learn==0.20.0
+* Matching==0.1.1
+* Gensim==3.7.3
+* psutil==5.8.0
+* smart_open==1.10.0
+* python-igraph==0.9.6
 
 #### GPU Installation
 The package can be installed using a similar procedure as the original OpenEA.
@@ -35,24 +35,20 @@ git clone https://github.com/jim-g-n/OpenEA.git OpenEA
 cd OpenEA
 pip install -e .
 ```
+The setup.py file defines explicit versions of dependencies for a GPU implementation. These can be manually updated for a CPU implementation based on the version numbers in the cpu_requirements.txt file. Users should also change their TensorFlow to version 1.13.1 if wanting to use a CPU.
 
 #### Usage
-The main adjustment is in the number of inputs when reading KGs from a folder. Filename extensions are now required for the seed alignments file and source and target triples files. We create noisy versions of these data labelled with the percentage noise.
-```python
-import openea as oa
+The main adjustment is in the number of inputs when reading KGs from a folder. Filename extensions are now required for the seed alignments file and source and target triples files, and are usually defined in terms of the percentage error. Additionally, validation sets are no longer taken as input. More concretely, KGs can be read using the following function:
 
-model = oa.kge_model.TransE
-args = load_args("hyperparameter file folder")
-kgs = read_kgs_from_folder("data folder", "source file number", "target file number", "seed file number")
-model.set_args(args)
-model.set_kgs(kgs)
-model.init()
-model.run()
-model.test()
-model.save()
+read_kgs_from_folder_no_valid(training_data_folder, division, mode, ordered, align_error_rate, source_kg_error, target_kg_error, remove_unlinked=False)
 
-```
-We run our experiments using using the main_from_args.py and main_from_args_wo_attr.py files. For example:
+where
+ * training_data_folder, division, mode, ordered all function as before
+ * Train links are read from the file 'train_links_' + align_error_rate
+ * Source triples are read from the file 'rel_triples_1_' + source_kg_error
+ * Target triples are read from the file 'rel_triples_2_' + target_kg_error
+
+The files main_from_args.py and main_from_args_wo_attr.py have also been updated to allow for these changes. For example, an experiment on IDS15K with a training size of 30% and 10% error in each of the seed alignments, source triples, and target triples can be run using:
 
 ```bash
 python main_from_args.py ./args/bootea_args_15K.json IDS15K 0_3/ 10 10 10
