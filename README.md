@@ -50,7 +50,7 @@ where
  * Source triples are read from the file `'rel_triples_1_' + str(source_kg_error)`
  * Target triples are read from the file `'rel_triples_2_' + str(target_kg_error)`
 
-The files `main_from_args.py` and `main_from_args_wo_attr.py` have also been updated to allow for these changes. For example, an experiment on IDS15K with a training size of 30% and 10% error the seed alignments, 20% error in source triples, and 30% error in target triples can be run using:
+The files `main_from_args.py` and `main_from_args_wo_attr.py` have also been updated to allow for these changes. For example, an experiment on IDS15K with a training size of 30%, 10% error in the seed alignments, 20% error in source triples, and 30% error in target triples can be run using:
 
 ```bash
 python main_from_args.py ./args/bootea_args_15K.json IDS15K 0_3/ 10 20 30
